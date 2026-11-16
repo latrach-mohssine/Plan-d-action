@@ -16,11 +16,26 @@
  * - si `term` est vide, renvoie toutes les cartes
  * Exemple : searchCards(cards, "kit") → [Emberkit, Sparkit]
  */
+
 export function searchCards(cards, term) {
+  
   // TODO 1. Nettoyez le terme : trim() puis toLowerCase()
+  const termFinal = term.trim().toLowerCase()
+if(termFinal ===""){
+   let result = [...cards]
+  return result;
+}else{
+  let result = cards.filter((card) => card.nom.toLowerCase().trim().includes(termFinal))
+  
+  return result;
+  }
+
+
+
   // TODO 2. Si le terme est vide, renvoyez une copie de cards
+
   // TODO 3. Sinon, renvoyez cards.filter(...) : le nom en minuscules contient-il le terme ?
-  return [];
+
 }
 
 /**
@@ -28,8 +43,15 @@ export function searchCards(cards, term) {
  * Exemple : filterByType(cards, "Eau") → [Tidalix, Reefling, Aquaphin]
  */
 export function filterByType(cards, type) {
+  if(type === "Tous"){
+    let result = [...cards]
+    return result;
+  }else{
+let result = cards.filter((card) => card.type.toLowerCase()===type.toLowerCase())
+return result;
+  }
   // TODO
-  return [];
+
 }
 
 /**
@@ -38,8 +60,13 @@ export function filterByType(cards, type) {
  * Exemple : getVisibleCards(cards, { term: "kit", type: "Feu" }) → [Emberkit]
  */
 export function getVisibleCards(cards, filters) {
+ let type = filters.type
+  let result =filterByType(cards, type)
+  let term = filters.term
+  let resultFinal = searchCards(result , term )
+
   // TODO : appelez filterByType, puis searchCards sur le résultat
-  return [];
+  return resultFinal;
 }
 
 /**
@@ -48,9 +75,16 @@ export function getVisibleCards(cards, filters) {
  */
 export function countByType(cards) {
   // TODO 1. Créez un objet vide : const counts = {};
+  const counts ={}
   // TODO 2. Pour chaque carte : si counts[carte.type] n'existe pas, mettez 0, puis ajoutez 1
+  for(const card of cards){
+    if(counts[card.type]===undefined){
+      counts[card.type]= 0
+    }
+    counts[card.type]++
+  }
   // TODO 3. Renvoyez counts
-  return {};
+  return counts;
 }
 
 // -------------------------------------------------------------

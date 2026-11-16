@@ -50,6 +50,20 @@ export function el(tag, className = "", text = "") {
  */
 export function renderTypes(counts, activeType) {
   // TODO 1. Videz #types
+  typesBox.innerHTML = ""
+  let array = Object.values(counts)
+ let numberCart =array.reduce((accumulator, currentValue) => {
+  return accumulator +currentValue;
+
+},0);
+let button = el("button", "type-btn", `Tous (${numberCart})`)
+button.setAttribute("type","button")
+if(activeType === "Tous"){
+  button.classList.add("is-active")
+  button.dataset.type = "Tous"
+
+}
+typesBox.append(button)
   // TODO 2. Créez le bouton « Tous (…) »
   // TODO 3. Pour chaque type de counts (for...in ou Object.keys), créez un bouton
 }
@@ -66,12 +80,12 @@ export function renderCount(n) {
  * list = les cartes à afficher ; cart = le panier (pour la classe is-selected, palier 2).
  * Si list est vide : un <p class="empty">Aucune carte trouvée</p>.
  * Modèle d'une carte :
- *   <article class="card" data-id="1">
- *     <img class="card__img" src="images/emberkit.svg" alt="Emberkit">
- *     <p class="card__num">#001</p>
- *     <h3 class="card__name">Emberkit</h3>
- *     <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>
- *     <p class="card__price">12 DH</p>
+ *   <article class="card" data-id="1">********************************************************************
+ *     <img class="card__img" src="images/emberkit.svg" alt="Emberkit">*******************************************************************
+ *     <p class="card__num">#001</p>*******************************************************************
+ *     <h3 class="card__name">Emberkit</h3>*******************************************************************
+ *     <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>*******************************************************************
+ *     <p class="card__price">12 DH</p>*******************************************************************
  *     <button class="btn btn--primary" type="button" data-add="1">Ajouter</button>
  *   </article>
  * - stock 0 : classe out-of-stock sur l'article ET bouton désactivé (disabled = true)
@@ -79,6 +93,45 @@ export function renderCount(n) {
  */
 export function renderGrid(list, cart) {
   // TODO 1. Videz #grid
+  grid.innerHTML=""
+  if(list.length === 0){
+  grid.append(el("p","empty", "Aucune carte trouvée"))
+  
+return 
+}
+for(const li of list){
+  const typeClas = typeClass(li.type)
+  const prix = formatPrix(li.prix)
+  const id = formatNumero(li.id)
+  let article =el("article","card", "");
+  article.dataset.id= li.id
+   let img = el("img", "card__img","")
+   img.setAttribute("src",`${li.image}`)
+   img.setAttribute("alt",`${li.nom}`)
+
+   let p_1 = el("p","card__num",`${id}`)
+   let h_3 = el("h3","card__name",`${li.nom}`)
+   let p_2 = el("p","card__meta","")
+   let span_1 = el("span",`badge ${typeClas}`,`${li.type}`)
+   let span_2 = el("span","rarity",`${li.rarete}`)
+p_2.append(span_1,span_2)
+   let p_3 = el("p","card__price",`${prix}`)
+   let button = el("button","btn btn--primary","Ajouter")
+   button.setAttribute("type","button" )
+button.dataset.add = li.id
+if(li.stock === 0){
+  article.classList.add("out-of-stock")
+  button.disabled = true
+}
+  let inCart = cart.some((carts) => carts.id ===li.id)
+if(inCart){
+   article.classList.add("is-selected")
+
+}
+article.append(img,p_1,h_3,p_2,p_3,button)
+   grid.append(article)
+
+  }
   // TODO 2. Liste vide : ajoutez le message et arrêtez (return)
   // TODO 3. Pour chaque carte : créez l'article et ses enfants, puis grid.append(article)
 }
